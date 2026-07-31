@@ -1,0 +1,87 @@
+name: Build Minimal FFmpeg
+
+on:
+  workflow_dispatch:
+
+env:
+  FFMPEG_TAG: n8.1.2
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout FFmpeg
+        uses: actions/checkout@v4
+        with:
+          repository: FFmpeg/FFmpeg
+          ref: ${{ env.FFMPEG_TAG }}
+          fetch-depth: 1
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            nasm \
+            yasm
+
+      - name: Configure
+        run: |
+          ./configure \
+            --prefix="$PWD/out" \
+            \
+            --disable-everything \
+            --disable-autodetect \
+            --disable-doc \
+            --disable-debug \
+            --disable-network \
+            --disable-iconv \
+            --disable-bzlib \
+            --disable-lzma \
+            --disable-zlib \
+            --disable-sdl2 \
+            \
+            --disable-ffplay \
+            --disable-ffprobe \
+            --enable-ffmpeg \
+            \
+            --disable-avdevice \
+            --disable-avfilter \
+            --disable-swscale \
+            --enable-swresample \
+            \
+            --enable-avcodec \
+            --enable-avformat \
+            --enable-avutil \
+            \
+            --enable-protocol=file \
+            \
+            --enable-muxer=mp4 \
+            \
+            --enable-encoder=aac \
+            --enable-decoder=aac \
+            --enable-parser=aac \
+            \
+            --enable-decoder=h264 \
+            --enable-parser=h264
+
+      - name: Build
+        run: make -j$(nproc)
+
+      - name: Install
+        run: make install
+
+      - name: Strip binary
+        run: strip out/bin/ffmpeg
+
+      - name: Archive
+        run: |
+          tar -C out -czf ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-${{ env.FFMPEG_TAG }}-minimal
+          path: ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz
