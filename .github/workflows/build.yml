@@ -31,6 +31,15 @@ jobs:
         run: |
           ./configure \
             --prefix="$PWD/out" \
+            --disable-autodetect \
+            --disable-doc \
+            --disable-debug \
+            --disable-network \
+            --disable-ffplay \
+            --disable-ffprobe \
+            --disable-avdevice \
+            --disable-avfilter \
+            --disable-swscale \
             \
             --disable-everything \
             --disable-autodetect \
@@ -67,9 +76,21 @@ jobs:
             --enable-decoder=h264 \
             --enable-parser=h264
 
+      - name: Show config
+        run: |
+          cat ffbuild/config.mak | grep CONFIG_FFMPEG
+
+      - name: Verify configure
+        run: |
+          ls -la
+          test -f Makefile || exit 1
+
       - name: Build
         run: make -j$(nproc)
-
+      - name: Show build results
+        run: |
+          find . -maxdepth 2 -type f -name ffmpeg
+          ls -la
       - name: Strip binary
         run: |
           strip ffmpeg
