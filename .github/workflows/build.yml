@@ -70,11 +70,15 @@ jobs:
       - name: Build
         run: make -j$(nproc)
 
-      - name: Install
-        run: make install
-
       - name: Strip binary
-        run: strip out/bin/ffmpeg
+        run: |
+          strip ffmpeg
+
+      - name: Package
+        run: |
+          mkdir package
+          cp ffmpeg package/
+          tar -czf ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz -C package .
 
       - name: Archive
         run: |
