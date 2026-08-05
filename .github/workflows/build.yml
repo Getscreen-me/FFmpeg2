@@ -31,20 +31,25 @@ jobs:
 
       - name: Configure
         run: |
-            ./configure \
-            --prefix="$GITHUB_WORKSPACE/build" \
-            --disable-everything \
-            --enable-ffmpeg \
-            --disable-ffplay \
-            --disable-ffprobe \
-            --disable-doc \
-            --disable-debug \
-            --disable-network \
-            --disable-shared \
-            --enable-static \
-            \
-            --enable-protocol=file \
-            --enable-muxer=mp4
+          ./configure \
+          --disable-everything \
+          --enable-ffmpeg \
+          --disable-ffplay \
+          --disable-ffprobe \
+          --disable-doc \
+          --disable-debug \
+          --disable-network \
+          --disable-shared \
+          --enable-static \
+          \
+          --enable-protocol=file \
+          \
+          --enable-demuxer=mov \
+          --enable-muxer=mp4 \
+          \
+          --enable-parser=h264 \
+          --enable-parser=hevc \
+          --enable-parser=aac
 
       - name: Build
         run: |
