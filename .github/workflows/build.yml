@@ -3,20 +3,20 @@ name: Build Minimal FFmpeg
 on:
   workflow_dispatch:
 
-env:
-  FFMPEG_TAG: n8.1.2
-
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout FFmpeg
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          repository: FFmpeg/FFmpeg
-          ref: ${{ env.FFMPEG_TAG }}
-          fetch-depth: 1
+          fetch-depth: 0
+
+      - name: Checkout FFmpeg tag
+        run: |
+          git fetch --tags
+          git checkout n8.1.2
 
       - name: Install dependencies
         run: |
@@ -24,98 +24,28 @@ jobs:
           sudo apt-get install -y \
             build-essential \
             pkg-config \
-            nasm \
-            yasm
+            yasm \
+            nasm
 
       - name: Configure
         run: |
           ./configure \
-            --prefix="$PWD/out" \
-            --disable-autodetect \
-            --disable-doc \
+            --prefix="$GITHUB_WORKSPACE/build" \
             --disable-debug \
-            --disable-network \
-            --disable-ffplay \
-            --disable-ffprobe \
-            --disable-avdevice \
-            --disable-avfilter \
-            --disable-swscale \
-            \
-            --disable-everything \
-            --disable-autodetect \
             --disable-doc \
-            --disable-debug \
-            --disable-network \
-            --disable-iconv \
-            --disable-bzlib \
-            --disable-lzma \
-            --disable-zlib \
-            --disable-sdl2 \
-            \
             --disable-ffplay \
-            --disable-ffprobe \
-            --enable-ffmpeg \
-            \
-            --disable-avdevice \
-            --disable-avfilter \
-            --disable-swscale \
-            --enable-swresample \
-            \
-            --enable-avcodec \
-            --enable-avformat \
-            --enable-avutil \
-            \
-            --enable-protocol=file \
-            \
-            --enable-muxer=mp4 \
-            \
-            --enable-encoder=aac \
-            --enable-decoder=aac \
-            --enable-parser=aac \
-            \
-            --enable-decoder=h264 \
-            --enable-parser=h264
-      - name: Check configure
-        run: |
-          grep CONFIG_FFMPEG ffbuild/config.mak
-          grep CONFIG_FFPROBE ffbuild/config.mak
-          grep CONFIG_FFPLAY ffbuild/config.mak
-      - name: Show config
-        run: |
-          cat ffbuild/config.mak | grep CONFIG_FFMPEG
-
-      - name: Verify configure
-        run: |
-          ls -la
-          test -f Makefile || exit 1
+            --disable-shared \
+            --enable-static
 
       - name: Build
         run: |
-          make -j$(nproc) V=1
-      - name: Verify binary
-        run: |
-          ls -la
-          find . -name ffmpeg -type f
-      - name: Show build results
-        run: |
-          find . -maxdepth 2 -type f -name ffmpeg
-          ls -la
-      - name: Strip binary
-        run: |
-          strip ffmpeg
+          make -j$(nproc)
+          make install
 
-      - name: Package
-        run: |
-          mkdir package
-          cp ffmpeg package/
-          tar -czf ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz -C package .
-
-      - name: Archive
-        run: |
-          tar -C out -czf ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz .
-
-      - name: Upload artifact
+      - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-${{ env.FFMPEG_TAG }}-minimal
-          path: ffmpeg-${{ env.FFMPEG_TAG }}-minimal.tar.gz
+          name: ffmpeg-n8.1.2-linux
+          path: |
+            build/bin/ffmpeg
+            build/bin/ffprobe
