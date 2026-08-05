@@ -31,23 +31,29 @@ jobs:
 
       - name: Configure
         run: |
-          ./configure \
+            ./configure \
             --prefix="$GITHUB_WORKSPACE/build" \
-            --disable-debug \
-            --disable-doc \
+            --disable-everything \
+            --enable-ffmpeg \
             --disable-ffplay \
+            --disable-ffprobe \
+            --disable-doc \
+            --disable-debug \
+            --disable-network \
             --disable-shared \
-            --enable-static
+            --enable-static \
+            \
+            --enable-protocol=file \
+            --enable-muxer=mp4
 
       - name: Build
         run: |
           make -j$(nproc)
           make install
 
-      - name: Upload binaries
+      - name: Upload ffmpeg
         uses: actions/upload-artifact@v4
         with:
           name: ffmpeg-n8.1.2-linux
           path: |
             build/bin/ffmpeg
-            build/bin/ffprobe
