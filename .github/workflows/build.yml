@@ -28,17 +28,24 @@ jobs:
             pkg-config \
             yasm \
             nasm
-
+      # запускаем конфигаратор ffmpeg и генерирует makefile
       - name: Configure
         run: |
           ./configure \
           --prefix="$GITHUB_WORKSPACE/build" \
+      # отключение всего
           --disable-everything \
+      # включить ffmpeg
           --enable-ffmpeg \
+      # не собирать ffplay 
           --disable-ffplay \
+      # не собирать ffprobe   
           --disable-ffprobe \
+      # не генерировать man
           --disable-doc \
+      # отключить отладку
           --disable-debug \
+      # отключить сетевые протоколы (работа только с локальными файлами)
           --disable-network \
           --disable-shared \
           --enable-static \
