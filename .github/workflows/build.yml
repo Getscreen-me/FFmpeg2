@@ -30,35 +30,47 @@ jobs:
             nasm
 
       - name: Configure
-      # запускаем конфигаратор ffmpeg и генерирует makefile
         run: |
+          # запускаем конфигуратор FFmpeg и генерируем Makefile
           ./configure \
-          --prefix="$GITHUB_WORKSPACE/build" \
-      # отключение всего
-          --disable-everything \
-          # включить ffmpeg
-          --enable-ffmpeg \
-          # не собирать ffplay 
-          --disable-ffplay \
-          # не собирать ffprobe   
-          --disable-ffprobe \
-          # не генерировать man
-          --disable-doc \
-          # отключить отладку
-          --disable-debug \
-          # отключить сетевые протоколы (работа только с локальными файлами)
-          --disable-network \
-          --disable-shared \
-          --enable-static \
-          \
-          --enable-protocol=file \
-          \
-          --enable-demuxer=mov \
-          --enable-muxer=mp4 \
-          \
-          --enable-parser=h264 \
-          --enable-parser=hevc \
-          --enable-parser=aac
+            --prefix="$GITHUB_WORKSPACE/build" \
+            \
+            # отключить всё
+            --disable-everything \
+            \
+            # включить сборку ffmpeg
+            --enable-ffmpeg \
+            \
+            # не собирать ffplay
+            --disable-ffplay \
+            \
+            # не собирать ffprobe
+            --disable-ffprobe \
+            \
+            # не генерировать документацию (man)
+            --disable-doc \
+            \
+            # отключить отладочную информацию
+            --disable-debug \
+            \
+            # отключить сетевые протоколы (работа только с локальными файлами)
+            --disable-network \
+            \
+            # собирать только статические библиотеки
+            --disable-shared \
+            --enable-static \
+            \
+            # оставить только файловый протокол
+            --enable-protocol=file \
+            \
+            # поддержка контейнера MP4
+            --enable-demuxer=mov \
+            --enable-muxer=mp4 \
+            \
+            # парсеры необходимых кодеков
+            --enable-parser=h264 \
+            --enable-parser=hevc \
+            --enable-parser=aac
 
       - name: Build
         run: |
