@@ -40,10 +40,13 @@ jobs:
           # отключить отладочную информацию
           # отключить сетевые протоколы (работа только с локальными файлами)
           # собирать только статические библиотеки
-          # оставить только файловый протокол (разрешать открывать *.mp4 или /folder/*.mp4)
-          # поддержка контейнера MP4 (чтение)
+          # оставить только файловый протокол (разрешать открывать локальные файлы)
+          # поддержка контейнеров MP4/MOV (чтение)
+          # поддержка контейнеров MKV/WebM (чтение)
+          # поддержка контейнера OGG (чтение)
           # поддержка контейнера MP4 (запись)
-          # парсеры кодеков
+          # парсеры видео (H.264, H.265, VP8, VP9)
+          # парсеры аудио (AAC, Opus, Vorbis)
           ./configure \
             --prefix="$GITHUB_WORKSPACE/build" \
             --disable-everything \
@@ -57,10 +60,16 @@ jobs:
             --enable-static \
             --enable-protocol=file \
             --enable-demuxer=mov \
+            --enable-demuxer=matroska \
+            --enable-demuxer=ogg \
             --enable-muxer=mp4 \
             --enable-parser=h264 \
             --enable-parser=hevc \
-            --enable-parser=aac
+            --enable-parser=vp8 \
+            --enable-parser=vp9 \
+            --enable-parser=aac \
+            --enable-parser=opus \
+            --enable-parser=vorbis
 
       - name: Build
         run: |
