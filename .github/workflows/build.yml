@@ -55,6 +55,7 @@ jobs:
       - name: Build
         run: |
           make -j$(nproc)
+          make install
 
       - name: Upload ffmpeg
         uses: actions/upload-artifact@v4
