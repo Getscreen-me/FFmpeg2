@@ -35,17 +35,17 @@ jobs:
           --prefix="$GITHUB_WORKSPACE/build" \
       # отключение всего
           --disable-everything \
-      # включить ffmpeg
+          # включить ffmpeg
           --enable-ffmpeg \
-      # не собирать ffplay 
+          # не собирать ffplay 
           --disable-ffplay \
-      # не собирать ffprobe   
+          # не собирать ffprobe   
           --disable-ffprobe \
-      # не генерировать man
+          # не генерировать man
           --disable-doc \
-      # отключить отладку
+          # отключить отладку
           --disable-debug \
-      # отключить сетевые протоколы (работа только с локальными файлами)
+          # отключить сетевые протоколы (работа только с локальными файлами)
           --disable-network \
           --disable-shared \
           --enable-static \
