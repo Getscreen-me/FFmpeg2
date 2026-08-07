@@ -37,43 +37,100 @@ jobs:
       - name: Configure
         run: |
           # запускаем конфигуратор FFmpeg и генерируем Makefile
-          # отключить всё
-          # включить сборку ffmpeg
-          # не собирать ffplay
-          # не собирать ffprobe
-          # не генерировать документацию (man)
-          # отключить отладочную информацию
-          # отключить сетевые протоколы (работа только с локальными файлами)
-          # собирать только статические библиотеки
-          # оставить только файловый протокол (разрешать открывать локальные файлы)
-          # поддержка контейнеров MP4/MOV (чтение)
-          # поддержка контейнеров MKV/WebM (чтение)
-          # поддержка контейнера OGG (чтение)
-          # поддержка контейнера MP4 (запись)
-          # парсеры видео (H.264, H.265, VP8, VP9)
-          # парсеры аудио (AAC, Opus, Vorbis)
           ./configure \
+            \
+            # каталог установки для команды "make install"
             --prefix="$GITHUB_WORKSPACE/build" \
+            \
+            # отключить все компоненты FFmpeg
             --disable-everything \
+            \
+            # собрать только утилиту ffmpeg
             --enable-ffmpeg \
+            \
+            # не собирать видеоплеер
             --disable-ffplay \
+            \
+            # не собирать утилиту анализа медиафайлов
             --disable-ffprobe \
+            \
+            # не генерировать документацию (man/html)
             --disable-doc \
+            \
+            # отключить отладочную информацию
             --disable-debug \
+            \
+            # отключить поддержку сетевых протоколов (HTTP, RTSP, RTP, FTP и т.д.)
             --disable-network \
+            \
+            # не искать автоматически внешние библиотеки в системе
+            --disable-autodetect \
+            \
+            # отключить все устройства ввода (камера, экран, микрофон и т.д.)
+            --disable-indevs \
+            \
+            # отключить все устройства вывода
+            --disable-outdevs \
+            \
+            # отключить все фильтры (масштабирование, обрезка, поворот и т.д.)
+            --disable-filters \
+            \
+            # отключить все bitstream-фильтры
+            --disable-bsfs \
+            \
+            # отключить аппаратное ускорение (VAAPI, CUDA, QSV и др.)
+            --disable-hwaccels \
+            \
+            # не использовать iconv
+            --disable-iconv \
+            \
+            # не использовать zlib
+            --disable-zlib \
+            \
+            # не использовать bzip2
+            --disable-bzlib \
+            \
+            # не использовать liblzma (xz)
+            --disable-lzma \
+            \
+            # собирать только статические библиотеки
             --disable-shared \
             --enable-static \
+            \
+            # оставить только работу с локальными файлами
             --enable-protocol=file \
+            \
+            # поддержка контейнеров MP4/MOV (чтение)
             --enable-demuxer=mov \
+            \
+            # поддержка контейнеров MKV и WebM (чтение)
             --enable-demuxer=matroska \
+            \
+            # поддержка контейнера OGG (чтение)
             --enable-demuxer=ogg \
+            \
+            # поддержка контейнера MP4 (запись)
             --enable-muxer=mp4 \
+            \
+            # парсер H.264 (AVC)
             --enable-parser=h264 \
+            \
+            # парсер H.265 (HEVC)
             --enable-parser=hevc \
+            \
+            # парсер VP8
             --enable-parser=vp8 \
+            \
+            # парсер VP9
             --enable-parser=vp9 \
+            \
+            # парсер AAC
             --enable-parser=aac \
+            \
+            # парсер Opus
             --enable-parser=opus \
+            \
+            # парсер Vorbis
             --enable-parser=vorbis
 
       - name: Build
