@@ -101,10 +101,6 @@ jobs:
           #
           # Не генерировать TXT-документацию.
           #
-          # Отключить поддержку многопоточности (pthreads).
-          #
-          # Отключить определение возможностей процессора во время выполнения. Набор инструкций (SSE, AVX и др.) будет определён во время компиляции.
-          #
           # Собирать только статические библиотеки.
           #
           # Оставить только работу с локальными файлами.
@@ -130,6 +126,7 @@ jobs:
           ./configure \
             --prefix="$GITHUB_WORKSPACE/build" \
             --disable-everything \
+            --disable-programs \
             --disable-filters \
             --disable-bsfs \
             --disable-protocols \
@@ -162,8 +159,6 @@ jobs:
             --disable-manpages \
             --disable-podpages \
             --disable-txtpages \
-            --disable-pthreads \
-            --disable-runtime-cpudetect \
             --enable-static \
             --enable-protocol=file \
             --enable-demuxer=mov \
