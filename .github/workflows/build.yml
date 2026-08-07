@@ -42,6 +42,10 @@ jobs:
           #
           # Отключить все компоненты FFmpeg.
           #
+          # Явно отключить все категории компонентов.
+          # Эти параметры уже покрываются --disable-everything и не уменьшают
+          # размер бинарника дополнительно. Они оставлены для наглядности.
+          #
           # Собрать только утилиту ffmpeg.
           #
           # Не собирать ffplay (видеоплеер).
@@ -76,7 +80,31 @@ jobs:
           #
           # Не использовать bzip2.
           #
-          # Не использовать liblzma (xz).
+          # Не использовать liblzma (XZ).
+          #
+          # Не собирать libswscale
+          # (масштабирование и преобразование форматов изображения).
+          #
+          # Не собирать libswresample
+          # (ресемплинг и преобразование аудио).
+          #
+          # Не собирать libpostproc
+          # (постобработка видео).
+          #
+          # Не собирать libavdevice
+          # (работа с устройствами: камеры, микрофоны и т.д.).
+          #
+          # Отключить поддержку GPL-компонентов.
+          #
+          # Отключить поддержку LGPLv3/GPLv3-компонентов.
+          #
+          # Не генерировать HTML-документацию.
+          #
+          # Не генерировать man-страницы.
+          #
+          # Не генерировать POD-документацию.
+          #
+          # Не генерировать TXT-документацию.
           #
           # Собирать только статические библиотеки.
           #
@@ -103,6 +131,15 @@ jobs:
           ./configure \
             --prefix="$GITHUB_WORKSPACE/build" \
             --disable-everything \
+            --disable-programs \
+            --disable-filters \
+            --disable-bsfs \
+            --disable-protocols \
+            --disable-demuxers \
+            --disable-muxers \
+            --disable-parsers \
+            --disable-encoders \
+            --disable-decoders \
             --enable-ffmpeg \
             --disable-ffplay \
             --disable-ffprobe \
@@ -112,14 +149,22 @@ jobs:
             --disable-autodetect \
             --disable-indevs \
             --disable-outdevs \
-            --disable-filters \
-            --disable-bsfs \
             --disable-hwaccels \
             --disable-iconv \
             --disable-zlib \
             --disable-bzlib \
             --disable-lzma \
             --disable-shared \
+            --disable-swscale \
+            --disable-swresample \
+            --disable-postproc \
+            --disable-avdevice \
+            --disable-gpl \
+            --disable-version3 \
+            --disable-htmlpages \
+            --disable-manpages \
+            --disable-podpages \
+            --disable-txtpages \
             --enable-static \
             --enable-protocol=file \
             --enable-demuxer=mov \
