@@ -132,7 +132,6 @@ jobs:
           ./configure \
             --prefix="$GITHUB_WORKSPACE/build" \
             --disable-everything \
-            --disable-programs \
             --disable-filters \
             --disable-bsfs \
             --disable-protocols \
