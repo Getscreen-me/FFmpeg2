@@ -6,7 +6,7 @@ on:
       branch-name:
         required: true
         type: string
-        default: n8.1.2
+        default: n9.0
 
 jobs:
   build:
@@ -79,11 +79,9 @@ jobs:
       - name: Build
         run: |
           make -j$(nproc)
-          make install
 
       - name: Upload ffmpeg
         uses: actions/upload-artifact@v4
         with:
           name: ffmpeg-n8.1.2-linux
-          path: |
-            build/bin/ffmpeg
+          path: ffmpeg
