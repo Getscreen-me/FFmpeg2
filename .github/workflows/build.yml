@@ -88,9 +88,6 @@ jobs:
           # Не собирать libswresample
           # (ресемплинг и преобразование аудио).
           #
-          # Не собирать libpostproc
-          # (постобработка видео).
-          #
           # Не собирать libavdevice
           # (работа с устройствами: камеры, микрофоны и т.д.).
           #
@@ -157,7 +154,6 @@ jobs:
             --disable-shared \
             --disable-swscale \
             --disable-swresample \
-            --disable-postproc \
             --disable-avdevice \
             --disable-gpl \
             --disable-version3 \
@@ -182,6 +178,7 @@ jobs:
       - name: Build
         run: |
           make -j$(nproc)
+          strip ffmpeg
 
       - name: Upload ffmpeg
         uses: actions/upload-artifact@v4
