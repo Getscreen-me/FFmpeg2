@@ -181,5 +181,5 @@ jobs:
       - name: Upload ffmpeg
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-n8.1.2-linux
+          name: ffmpeg-${{ inputs.branch-name }}-linux
           path: ffmpeg
